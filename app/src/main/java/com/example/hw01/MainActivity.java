@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         customTipSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                customTipValue.setText(String.valueOf(customTipSeekBar.getProgress()) + " %");
             }
 
             @Override
