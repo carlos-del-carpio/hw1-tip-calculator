@@ -3,6 +3,8 @@ package com.example.hw01;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,34 +16,79 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.EmptyStackException;
 
+public class MainActivity extends AppCompatActivity {
     String TAG;
+    EditText userEnteredBillValue;
+    RadioGroup tipRadioGroup;
+    SeekBar customTipSeekBar;
+    TextView customTipValue;
+    TextView tipTotal;
+    TextView billTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        EditText userEnteredBillValue = findViewById(R.id.bill_value);
-        RadioGroup tipRadioGroup = findViewById(R.id.tip_percent_options);
-        SeekBar customTipSeekBar = findViewById(R.id.custom_tip);
-        TextView customTipValue = findViewById(R.id.custom_tip_value);
-        TextView tipTotal = findViewById(R.id.tip_value);
-        TextView billTotal = findViewById(R.id.bill_total);
+        userEnteredBillValue = findViewById(R.id.bill_value);
+        tipRadioGroup = findViewById(R.id.tip_percent_options);
+        customTipSeekBar = findViewById(R.id.custom_tip);
+        customTipValue = findViewById(R.id.custom_tip_value);
+        tipTotal = findViewById(R.id.tip_value);
+        billTotal = findViewById(R.id.bill_total);
 
-        userEnteredBillValue.setOnKeyListener(new View.OnKeyListener() {
+
+        /**
+         * Event listener to update tip and total when bill total is updated
+         */
+        userEnteredBillValue.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-                if(userEnteredBillValue.getText() == null) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    Double tipAmount = 0.0;
+                    Double total = 0.0;
+                    final Double tenPercentTip = 0.10;
+                    final Double fifteenPercentTip = 0.15;
+                    final Double eighteenPercentTip = 0.18;
+
+                    switch (tipRadioGroup.getCheckedRadioButtonId()) {
+                        case R.id.ten_percent :
+                            tipAmount = tenPercentTip;
+                            break;
+                        case R.id.fifteen_percent :
+                            tipAmount = fifteenPercentTip;
+                            break;
+                        case R.id.eighteen_percent :
+                            tipAmount = eighteenPercentTip;
+                            break;
+                    }
+
+                    tipAmount *= Double.valueOf(String.valueOf(userEnteredBillValue.getText()));
+                    total = Double.valueOf(String.valueOf(userEnteredBillValue.getText())) + tipAmount;
+                    tipTotal.setText(String.valueOf(tipAmount));
+                    billTotal.setText(String.valueOf(total));
+
+                } catch (Exception e) {
                     tipTotal.setText("");
                     billTotal.setText("");
-                } else {
-                    tipTotal.setText(userEnteredBillValue.getText().toString());
                 }
-                return false;
             }
         });
+
+        tipRadioGroup.check(R.id.ten_percent);
+    }
+
+    public Double calculateTotal() {
+        return Double.parseDouble(userEnteredBillValue.getText().toString()) + Double.parseDouble(tipTotal.getText().toString());
     }
 }
