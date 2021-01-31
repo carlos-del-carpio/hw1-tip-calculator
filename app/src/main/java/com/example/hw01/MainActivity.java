@@ -39,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
         tipTotal = findViewById(R.id.tip_value);
         billTotal = findViewById(R.id.bill_total);
 
+        //Setting some default attributes
+        tipRadioGroup.check(R.id.ten_percent);
+        customTipSeekBar.setMax(50);
+        customTipSeekBar.setMin(20);
+
 
         /**
          * Event listener to update tip and total when bill total is updated
@@ -81,14 +86,9 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     tipTotal.setText("");
                     billTotal.setText("");
+                    Toast.makeText(MainActivity.this, "Enter Bill Total", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-        tipRadioGroup.check(R.id.ten_percent);
-    }
-
-    public Double calculateTotal() {
-        return Double.parseDouble(userEnteredBillValue.getText().toString()) + Double.parseDouble(tipTotal.getText().toString());
     }
 }
