@@ -42,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
         //Setting some default attributes
         tipRadioGroup.check(R.id.ten_percent);
         customTipSeekBar.setMax(50);
-        customTipSeekBar.setMin(20);
+        customTipSeekBar.setProgress(20);
+        customTipValue.setText(String.valueOf(customTipSeekBar.getProgress()) + " %");
 
 
         /**
@@ -88,6 +89,23 @@ public class MainActivity extends AppCompatActivity {
                     billTotal.setText("");
                     Toast.makeText(MainActivity.this, "Enter Bill Total", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        customTipSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
     }
