@@ -1,7 +1,9 @@
 package com.example.hw01;
 
+import androidx.annotation.experimental.Experimental;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SearchRecentSuggestionsProvider;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -77,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.eighteen_percent :
                             tipAmount = eighteenPercentTip;
                             break;
+                        case R.id.custom_option :
+                            tipAmount = Double.parseDouble(String.valueOf(customTipSeekBar.getProgress())) / 100;
                     }
 
                     tipAmount *= Double.valueOf(String.valueOf(userEnteredBillValue.getText()));
@@ -93,9 +97,23 @@ public class MainActivity extends AppCompatActivity {
         });
 
         customTipSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            Double tipAmount = 0.0;
+            Double total = 0.0;
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                customTipValue.setText(String.valueOf(customTipSeekBar.getProgress()) + " %");
+                try {
+                    tipRadioGroup.check(R.id.custom_option);
+                    customTipValue.setText(String.valueOf(customTipSeekBar.getProgress()) + " %");
+                    tipAmount = Double.valueOf(String.valueOf(customTipSeekBar.getProgress())) / 100;
+
+                    tipAmount *= Double.valueOf(String.valueOf(userEnteredBillValue.getText()));
+                    total = Double.valueOf(String.valueOf(userEnteredBillValue.getText())) + tipAmount;
+                    tipTotal.setText(String.valueOf(tipAmount));
+                    billTotal.setText(String.valueOf(total));
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, "Enter Bill Total", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
