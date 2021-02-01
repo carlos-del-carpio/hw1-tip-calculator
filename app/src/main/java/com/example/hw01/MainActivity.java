@@ -1,3 +1,9 @@
+/**
+ * Assignment #: HW01
+ * File name: hw01.zip
+ * Student: Carlos Del Carpio
+ */
+
 package com.example.hw01;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         tipRadioGroup.check(R.id.ten_percent);
         customTipSeekBar.setMax(50);
         customTipSeekBar.setProgress(20);
-        customTipValue.setText(customTipSeekBar.getProgress() + " %");
+        customTipValue.setText(customTipSeekBar.getProgress() + String.format(getResources().getString(R.string.space_percent)));
 
 
         /*
@@ -87,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     tipTotal.setText("");
                     billTotal.setText("");
-                    Toast.makeText(MainActivity.this, "Enter Bill Total", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, String.format(getResources().getString(R.string.enter_bill_total)), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -103,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 try {
-                    customTipValue.setText(customTipSeekBar.getProgress() + " %");
+                    customTipValue.setText(customTipSeekBar.getProgress() + String.format(getResources().getString(R.string.space_percent)));
                     tipAmount = Double.parseDouble(String.valueOf(customTipSeekBar.getProgress())) / 100;
 
                     tipAmount *= Double.parseDouble(String.valueOf(userEnteredBillValue.getText()));
@@ -111,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                     tipTotal.setText(String.valueOf(tipAmount));
                     billTotal.setText(String.valueOf(total));
                 } catch (Exception e) {
-                    Toast.makeText(MainActivity.this, "Enter Bill Total", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, String.format(getResources().getString(R.string.enter_bill_total)), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -162,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     tipTotal.setText("");
                     billTotal.setText("");
-                    Toast.makeText(MainActivity.this, "Enter Bill Total", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, String.format(getResources().getString(R.string.enter_bill_total)), Toast.LENGTH_SHORT).show();
                 }
             }
         });

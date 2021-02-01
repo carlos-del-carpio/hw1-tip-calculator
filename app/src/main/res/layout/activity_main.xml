@@ -54,7 +54,7 @@
             android:id="@+id/ten_percent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/ten_percent" />
+            android:text="@string/space_percent" />
 
         <RadioButton
             android:id="@+id/fifteen_percent"
