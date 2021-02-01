@@ -1,10 +1,7 @@
 package com.example.hw01;
 
-import androidx.annotation.experimental.Experimental;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.content.SearchRecentSuggestionsProvider;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,12 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
 
-import org.w3c.dom.Text;
-
-import java.util.EmptyStackException;
 
 public class MainActivity extends AppCompatActivity {
-    String TAG;
     EditText userEnteredBillValue;
     RadioGroup tipRadioGroup;
     SeekBar customTipSeekBar;
@@ -43,15 +36,15 @@ public class MainActivity extends AppCompatActivity {
         billTotal = findViewById(R.id.bill_total);
         exit_button = findViewById(R.id.exit_button);
 
-        //Setting some default attributes
+        //Setting default attributes
         tipRadioGroup.check(R.id.ten_percent);
         customTipSeekBar.setMax(50);
         customTipSeekBar.setProgress(20);
-        customTipValue.setText(String.valueOf(customTipSeekBar.getProgress()) + " %");
+        customTipValue.setText(customTipSeekBar.getProgress() + " %");
 
 
-        /**
-         * Event listener to update tip and total when bill total is updated and preset tip % are selected
+        /*
+          Event listener to update tip and total when bill total is updated and preset tip % are selected
          */
         userEnteredBillValue.addTextChangedListener(new TextWatcher() {
             @Override
@@ -65,12 +58,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 try {
-                    Double tipAmount = 0.0;
-                    Double total = 0.0;
-                    final Double tenPercentTip = 0.10;
-                    final Double fifteenPercentTip = 0.15;
-                    final Double eighteenPercentTip = 0.18;
+                    double tipAmount = 0.0;
+                    double total = 0.0;
+                    final double tenPercentTip = 0.10;
+                    final double fifteenPercentTip = 0.15;
+                    final double eighteenPercentTip = 0.18;
 
+                    /* Switches on the different radio buttons user can choose and sets tip percent */
                     switch (tipRadioGroup.getCheckedRadioButtonId()) {
                         case R.id.ten_percent :
                             tipAmount = tenPercentTip;
@@ -85,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
                             tipAmount = Double.parseDouble(String.valueOf(customTipSeekBar.getProgress())) / 100;
                     }
 
-                    tipAmount *= Double.valueOf(String.valueOf(userEnteredBillValue.getText()));
-                    total = Double.valueOf(String.valueOf(userEnteredBillValue.getText())) + tipAmount;
+                    tipAmount *= Double.parseDouble(String.valueOf(userEnteredBillValue.getText()));
+                    total = Double.parseDouble(String.valueOf(userEnteredBillValue.getText())) + tipAmount;
                     tipTotal.setText(String.valueOf(tipAmount));
                     billTotal.setText(String.valueOf(total));
 
@@ -99,8 +93,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        /**
-         * Event listener to update tip and total with seekbar updates
+        /*
+         * Event listener to update tip and total with SeekBar updates
          */
         customTipSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             Double tipAmount = 0.0;
@@ -109,12 +103,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 try {
-                    tipRadioGroup.check(R.id.custom_option);
-                    customTipValue.setText(String.valueOf(customTipSeekBar.getProgress()) + " %");
-                    tipAmount = Double.valueOf(String.valueOf(customTipSeekBar.getProgress())) / 100;
+                    customTipValue.setText(customTipSeekBar.getProgress() + " %");
+                    tipAmount = Double.parseDouble(String.valueOf(customTipSeekBar.getProgress())) / 100;
 
-                    tipAmount *= Double.valueOf(String.valueOf(userEnteredBillValue.getText()));
-                    total = Double.valueOf(String.valueOf(userEnteredBillValue.getText())) + tipAmount;
+                    tipAmount *= Double.parseDouble(String.valueOf(userEnteredBillValue.getText()));
+                    total = Double.parseDouble(String.valueOf(userEnteredBillValue.getText())) + tipAmount;
                     tipTotal.setText(String.valueOf(tipAmount));
                     billTotal.setText(String.valueOf(total));
                 } catch (Exception e) {
@@ -133,8 +126,49 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /*
+         * Event listener to update tip and total when user selects different radio buttons
+         */
+        tipRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                try {
+                    double tipAmount = 0.0;
+                    double total = 0.0;
+                    final double tenPercentTip = 0.10;
+                    final double fifteenPercentTip = 0.15;
+                    final double eighteenPercentTip = 0.18;
 
-        /**
+                    /* Switches on the different radio buttons user can choose and sets tip percent */
+                    switch (checkedId) {
+                        case R.id.ten_percent :
+                            tipAmount = tenPercentTip;
+                            break;
+                        case R.id.fifteen_percent :
+                            tipAmount = fifteenPercentTip;
+                            break;
+                        case R.id.eighteen_percent :
+                            tipAmount = eighteenPercentTip;
+                            break;
+                        case R.id.custom_option :
+                            tipAmount = Double.parseDouble(String.valueOf(customTipSeekBar.getProgress())) / 100;
+                    }
+
+                    tipAmount *= Double.parseDouble(String.valueOf(userEnteredBillValue.getText()));
+                    total = Double.parseDouble(String.valueOf(userEnteredBillValue.getText())) + tipAmount;
+                    tipTotal.setText(String.valueOf(tipAmount));
+                    billTotal.setText(String.valueOf(total));
+
+                } catch (Exception e) {
+                    tipTotal.setText("");
+                    billTotal.setText("");
+                    Toast.makeText(MainActivity.this, "Enter Bill Total", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        /*
          * On click listener to exit app to home screen.
          */
         exit_button.setOnClickListener(new View.OnClickListener() {
