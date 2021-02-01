@@ -3,18 +3,18 @@ package com.example.hw01;
 import androidx.annotation.experimental.Experimental;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SearchRecentSuggestionsProvider;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Button;
 
 import org.w3c.dom.Text;
 
@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     TextView customTipValue;
     TextView tipTotal;
     TextView billTotal;
+    Button exit_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         customTipValue = findViewById(R.id.custom_tip_value);
         tipTotal = findViewById(R.id.tip_value);
         billTotal = findViewById(R.id.bill_total);
+        exit_button = findViewById(R.id.exit_button);
 
         //Setting some default attributes
         tipRadioGroup.check(R.id.ten_percent);
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         /**
-         * Event listener to update tip and total when bill total is updated
+         * Event listener to update tip and total when bill total is updated and preset tip % are selected
          */
         userEnteredBillValue.addTextChangedListener(new TextWatcher() {
             @Override
@@ -96,6 +98,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        /**
+         * Event listener to update tip and total with seekbar updates
+         */
         customTipSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             Double tipAmount = 0.0;
             Double total = 0.0;
@@ -124,6 +130,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
+            }
+        });
+
+
+        /**
+         * On click listener to exit app to home screen.
+         */
+        exit_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                homeIntent.addCategory( Intent.CATEGORY_HOME );
+                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
             }
         });
     }
